@@ -16,6 +16,8 @@ public class RujukanMDL {
     private int id_rujukan;
     private String rs_rujukan;
     private String alamat_rs;
+    private String nama_dokter;
+    
     private Date tgl_rujukan;
     private String tindakan;
 
@@ -57,6 +59,14 @@ public class RujukanMDL {
 
     public void setTindakan(String tindakan) {
         this.tindakan = tindakan;
+    }
+
+    public String getNama_dokter() {
+        return nama_dokter;
+    }
+
+    public void setNama_dokter(String nama_dokter) {
+        this.nama_dokter = nama_dokter;
     }
  
 }

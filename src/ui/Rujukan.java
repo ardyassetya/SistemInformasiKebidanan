@@ -6,12 +6,21 @@
 package ui;
 
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import kebidanan.Kebidanan;
 import mgr.PasienManager;
-import static ui.dashboard.ListPasien;
-import static ui.dashboard.tableModel;
+import mgr.RujukanManager;
+import model.Pasien;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JTextField;
+
 
 /**
  *
@@ -22,17 +31,22 @@ public class Rujukan extends javax.swing.JFrame {
     /**
      * Creates new form Rujukan
      */
+    
+    int rujukanID = 0;
     public Rujukan() {
         initComponents();
+        initTableRujukan();
+        loadRujukan();
+                
     }
         public static DefaultTableModel tableModelrujukan;
-    
+        public static List<model.RujukanMDL> ListRujukan;
       private void initTableRujukan(){
         String[] tableColumns = new String []{"No Rujukan", "Rumah Sakit", "Alamat RS","Nama Dokter", 
-            "Tanggel Rujukan","Nama Pasien","No.Telp","Tindakan","No. BPJS"};
+            "Tanggel Rujukan","Tindakan","Nama","No.Telepon"};
     
         int[] columnWidth = {
-            180,270,200,200,200,200,200,200,200
+            180,270,200,200,200,200,200,200,
         };
 
         tableModelrujukan = new DefaultTableModel(tableColumns,0);
@@ -56,25 +70,48 @@ public class Rujukan extends javax.swing.JFrame {
         }
      }
       
-//      public static void loadRujukan(){
-//        dashboard.ListRujukan = new ArrayList<>();
-//        dashboard.ListRujukan = PasienManager.showAllpasien();
-//        dashboard.ListRujukan.setRowCount(0);
-//        dashboard.ListRujukan.forEach((var Pasien) -> {
-//                tableModelrujukan.addRow(new Object[]{
-//                    Pasien.getNIK(),
-//                    Pasien.getNama_pasien(),
-//                    Pasien.getTempat_lahir(),
-//                    Pasien.getTgl_lahir(), 
-//                    Pasien.getAlamat_pasien(), 
-//                    Pasien.getNo_telp(), 
-//                    Pasien.getTgl_positif(), 
-//                    Pasien.getKeluhan(), 
-//                    Pasien.getBpjs(), 
-//               });
-//        });
-//       
-//    }
+      public static void loadRujukan(){
+        ListRujukan = new ArrayList<>();
+        ListRujukan = RujukanManager.showAllrujukan();
+        tableModelrujukan.setRowCount(0);
+        ListRujukan.forEach((var RujukanMDL) -> {
+                tableModelrujukan.addRow(new Object[]{
+                    RujukanMDL.getId_rujukan(),
+                    RujukanMDL.getRs_rujukan(),
+                    RujukanMDL.getAlamat_rs(),
+                    RujukanMDL.getNama_dokter(),
+                    RujukanMDL.getTgl_rujukan(),
+                    RujukanMDL.getTindakan(),
+                   
+                    
+               });
+        });      
+    }
+      
+      void tambahRujukan() {
+        try {
+            Connection conn = Kebidanan.getConnection();
+            Statement stm = conn.createStatement();
+            //SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy");
+            String tglrujukan = ((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText();
+            String query = "INSERT INTO `rujukan` (`id_rujukan`,`rs_rujukan`,`alamat_rs`,`nama_dokter`,`tgl_rujukan`,`tindakan`) "
+                    + "VALUES ('" + tf1.getText() 
+                    + "', '" + tf2.getText() 
+                    + "', '" + tf3.getText() 
+                    + "', '" + tf4.getText() 
+                    + "', '" + tglrujukan
+                    + "', '" + tf5.getText()
+                   
+                    + "');";
+
+           
+            stm.executeUpdate(query);
+            JOptionPane.showMessageDialog(null, "Data sudah di tambah ", "infomasi", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e, "infomasi", JOptionPane.INFORMATION_MESSAGE);
+        }    
+    }
      
 
     /**
@@ -93,11 +130,11 @@ public class Rujukan extends javax.swing.JFrame {
         textbidan3 = new javax.swing.JLabel();
         textbidan4 = new javax.swing.JLabel();
         textbidan5 = new javax.swing.JLabel();
-        niktf = new javax.swing.JTextField();
-        niktf1 = new javax.swing.JTextField();
-        niktf2 = new javax.swing.JTextField();
-        niktf3 = new javax.swing.JTextField();
-        niktf4 = new javax.swing.JTextField();
+        tf1 = new javax.swing.JTextField();
+        tf2 = new javax.swing.JTextField();
+        tf3 = new javax.swing.JTextField();
+        tf4 = new javax.swing.JTextField();
+        tf5 = new javax.swing.JTextField();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         textbidan6 = new javax.swing.JLabel();
         niktf5 = new javax.swing.JTextField();
@@ -141,15 +178,17 @@ public class Rujukan extends javax.swing.JFrame {
         textbidan5.setFont(new java.awt.Font("Roboto Medium", 0, 18)); // NOI18N
         textbidan5.setText("Tindakan");
 
-        niktf.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        tf1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
 
-        niktf1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        tf2.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
 
-        niktf2.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        tf3.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
 
-        niktf3.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        tf4.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
 
-        niktf4.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        tf5.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+
+        jDateChooser1.setDateFormatString("yyyy-MM-dd");
 
         textbidan6.setFont(new java.awt.Font("Roboto Medium", 0, 18)); // NOI18N
         textbidan6.setText("Nama Pasien");
@@ -278,15 +317,15 @@ public class Rujukan extends javax.swing.JFrame {
                             .addComponent(textbidan3))
                         .addGap(18, 18, 18)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(niktf1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(niktf2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tf2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tf3, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, kGradientPanel1Layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(niktf3, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tf4, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(niktf4, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(niktf, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tf5, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(tf1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(textbidan11)
@@ -340,19 +379,19 @@ public class Rujukan extends javax.swing.JFrame {
                     .addGroup(kGradientPanel1Layout.createSequentialGroup()
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(textbidan)
-                            .addComponent(niktf, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tf1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(textbidan1)
-                            .addComponent(niktf1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tf2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(textbidan2)
-                            .addComponent(niktf2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tf3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(textbidan3)
-                            .addComponent(niktf3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tf4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(12, 12, 12)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(textbidan4)
@@ -360,7 +399,7 @@ public class Rujukan extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(textbidan5)
-                            .addComponent(niktf4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tf5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -388,7 +427,17 @@ public class Rujukan extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tambahbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahbtnActionPerformed
-       
+        if (rujukanID == 0) {
+                    tambahRujukan();
+                    loadRujukan();
+                } else {
+                 
+                }
+                DefaultTableModel tableModelrujukan = (DefaultTableModel)tablerujukan.getModel();
+                tableModelrujukan.setRowCount(0);
+                loadRujukan();
+
+                                   
     }//GEN-LAST:event_tambahbtnActionPerformed
 
     private void tambahbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahbtn1ActionPerformed
@@ -438,12 +487,7 @@ public class Rujukan extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JScrollPane jScrollPane1;
     private keeptoo.KGradientPanel kGradientPanel1;
-    private javax.swing.JTextField niktf;
-    private javax.swing.JTextField niktf1;
     private javax.swing.JTextField niktf10;
-    private javax.swing.JTextField niktf2;
-    private javax.swing.JTextField niktf3;
-    private javax.swing.JTextField niktf4;
     private javax.swing.JTextField niktf5;
     private javax.swing.JTextField niktf6;
     private javax.swing.JTextField niktf7;
@@ -465,5 +509,10 @@ public class Rujukan extends javax.swing.JFrame {
     private javax.swing.JLabel textbidan7;
     private javax.swing.JLabel textbidan8;
     private javax.swing.JLabel textbidan9;
+    private javax.swing.JTextField tf1;
+    private javax.swing.JTextField tf2;
+    private javax.swing.JTextField tf3;
+    private javax.swing.JTextField tf4;
+    private javax.swing.JTextField tf5;
     // End of variables declaration//GEN-END:variables
 }
