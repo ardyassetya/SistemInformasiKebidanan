@@ -583,7 +583,7 @@ public class dashboard extends javax.swing.JFrame {
             }
         });
 
-        Kbtn.setText("Kunjungan");
+        Kbtn.setText("Rujukan");
         Kbtn.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         Kbtn.setkBorderRadius(20);
         Kbtn.setkEndColor(new java.awt.Color(255, 255, 255));
@@ -665,7 +665,7 @@ public class dashboard extends javax.swing.JFrame {
         Dpanel.setkStartColor(new java.awt.Color(203, 243, 240));
 
         jLabel2.setFont(new java.awt.Font("Roboto Medium", 0, 24)); // NOI18N
-        jLabel2.setText("Howdy,");
+        jLabel2.setText("Apa Kabar, Ibu.");
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setPreferredSize(new java.awt.Dimension(200, 200));
@@ -828,9 +828,9 @@ public class dashboard extends javax.swing.JFrame {
         DpanelLayout.setVerticalGroup(
             DpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DpanelLayout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(36, 36, 36)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(namabidan)
                 .addGap(18, 18, 18)
                 .addGroup(DpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
